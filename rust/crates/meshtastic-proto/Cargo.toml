@@ -1,0 +1,26 @@
+[package]
+name = "meshtastic-proto"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Generated protobuf bindings for the Meshtastic protocol"
+
+[dependencies]
+prost = { workspace = true, features = ["std"] }
+prost-types = { workspace = true, features = ["std"] }
+
+[build-dependencies]
+prost-build = { workspace = true }
+
+[features]
+default = []
+# Enable serde Serialize/Deserialize derives on all generated types.
+# Off by default to keep the dependency footprint minimal for embedded targets.
+serde = ["dep:serde"]
+
+[dependencies.serde]
+version = "1"
+optional = true
+features = ["derive"]

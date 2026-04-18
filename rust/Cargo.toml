@@ -1,0 +1,28 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/meshtastic-proto",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/meshtastic/firmware"
+description = "Rust port of Meshtastic firmware (work in progress, T-Deck target)"
+
+[workspace.dependencies]
+prost = { version = "0.13", default-features = false, features = ["prost-derive"] }
+prost-build = "0.13"
+prost-types = { version = "0.13", default-features = false }
+
+[profile.release]
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+
+[profile.dev]
+opt-level = 1
