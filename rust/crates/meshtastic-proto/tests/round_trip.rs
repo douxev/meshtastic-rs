@@ -64,7 +64,7 @@ fn service_envelope_round_trip() {
 }
 
 #[test]
-fn user_round_trip_with_enum_and_bytes() {
+fn user_with_tdeck_hardware_model_round_trip() {
     let user = User {
         id: "!12345678".into(),
         long_name: "Test Node".into(),
@@ -159,13 +159,13 @@ fn nodeinfo_round_trip_optional_fields() {
 
 #[test]
 fn mesh_packet_default_is_empty_wire() {
-    // A zero-valued MeshPacket has no set fields and must serialise to an
+    // A zero-valued MeshPacket has no set fields and must serialize to an
     // empty buffer. This is a sanity check on `prost`'s default-handling
     // because every numeric field on the message has a proto3 default of 0.
     let bytes = MeshPacket::default().encode_to_vec();
     assert!(
         bytes.is_empty(),
-        "default MeshPacket must encode to zero bytes; got {bytes:?}"
+        "default MeshPacket must serialize to zero bytes; got {bytes:?}"
     );
 }
 
