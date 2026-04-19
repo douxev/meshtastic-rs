@@ -286,6 +286,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
+name = "meshtastic-config"
+version = "0.1.0"
+dependencies = [
+ "meshtastic-proto",
+ "prost",
+ "tempfile",
+]
+
+[[package]]
 name = "meshtastic-core"
 version = "0.1.0"
 dependencies = [
@@ -319,6 +328,15 @@ dependencies = [
 
 [[package]]
 name = "meshtastic-modules"
+version = "0.1.0"
+dependencies = [
+ "meshtastic-core",
+ "meshtastic-proto",
+ "prost",
+]
+
+[[package]]
+name = "meshtastic-phone-api"
 version = "0.1.0"
 dependencies = [
  "meshtastic-core",

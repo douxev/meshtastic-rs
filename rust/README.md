@@ -65,5 +65,5 @@ cargo clippy --workspace --all-targets -- -D warnings
 | 5     | `meshtastic-modules`: module trait + dispatcher + TextMessage + NodeInfo + Routing | **in progress** |
 | 6     | `meshtastic-hal` traits + `meshtastic-sim` host fakes      | **done**      |
 | 7     | `meshtastic-tdeck` binary (esp-hal-embassy + drivers)      | not started   |
-| 8     | BLE client API                                             | not started   |
-| 9     | Polish (deep sleep, OTA, persistent config)                | not started   |
+| 8     | BLE/serial client API (`meshtastic-phone-api`, transport-agnostic) | **done**      |
+| 9     | Persistent-config layer (`meshtastic-config`); deep-sleep + OTA deferred to Phase 7 | **partial**   |

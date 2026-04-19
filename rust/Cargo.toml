@@ -7,6 +7,8 @@ members = [
     "crates/meshtastic-modules",
     "crates/meshtastic-hal",
     "crates/meshtastic-sim",
+    "crates/meshtastic-phone-api",
+    "crates/meshtastic-config",
 ]
 
 [workspace.package]
