@@ -60,7 +60,7 @@ cargo clippy --workspace --all-targets -- -D warnings
 | 3     | `meshtastic-crypto` (AES-CTR packet crypto, channel hash)  | **done**      |
 | 4a    | `meshtastic-core`: Channels table + packet encrypt/decrypt | **done**      |
 | 4b    | `meshtastic-core`: NodeDb + PacketHistory                  | **done**      |
-| 5     | `meshtastic-modules`: module trait + dispatcher + TextMessage | **in progress** |
+| 5     | `meshtastic-modules`: module trait + dispatcher + TextMessage + NodeInfo | **in progress** |
 | 6     | `meshtastic-hal` traits + `meshtastic-sim` host fakes      | not started   |
 | 7     | `meshtastic-tdeck` binary (esp-hal-embassy + drivers)      | not started   |
 | 8     | BLE client API                                             | not started   |

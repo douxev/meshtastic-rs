@@ -86,3 +86,73 @@ fn want_response_triggers_no_reply_from_text_module() {
     assert!(out.module_found);
     assert!(out.reply.is_none(), "TextMessageModule does not produce replies");
 }
+
+/// End-to-end for the NodeInfo module: Alice broadcasts a nodeinfo
+/// (her User proto), Bob decrypts it with `meshtastic-core`, dispatches
+/// through a registered `NodeInfoModule`. Then Bob handles a DM
+/// nodeinfo request from Alice with `want_response=true` and produces
+/// a reply whose payload decodes back into Bob's owner.
+#[test]
+fn nodeinfo_round_trip_dispatches_and_replies() {
+    use meshtastic_core::nodedb::NodeDb;
+    use meshtastic_modules::NodeInfoModule;
+    use meshtastic_proto::meshtastic::User;
+    use prost::Message;
+
+    let channels = Channels::with_default_primary();
+    let primary = channels.primary_index();
+
+    // Bob's setup: NodeDb + dispatcher + module.
+    let mut nodedb = NodeDb::new(BOB);
+    let bob_owner = User {
+        long_name: "Bob".into(),
+        short_name: "Bo".into(),
+        ..Default::default()
+    };
+    let mut dispatcher = ModuleDispatcher::new();
+    dispatcher.register(NodeInfoModule::new(BOB, bob_owner.clone()));
+
+    // Alice unicasts her nodeinfo with want_response=true.
+    let alice_user = User {
+        long_name: "Alice".into(),
+        short_name: "Al".into(),
+        ..Default::default()
+    };
+    let mut req_payload = Vec::with_capacity(alice_user.encoded_len());
+    alice_user.encode(&mut req_payload).unwrap();
+    let mut dm = MeshPacket {
+        from: ALICE,
+        to: BOB,
+        id: 0x7002,
+        hop_limit: 3,
+        hop_start: 3,
+        rx_time: 1_700_000_000,
+        payload_variant: Some(PayloadVariant::Decoded(Data {
+            portnum: PortNum::NodeinfoApp as i32,
+            payload: req_payload,
+            want_response: true,
+            ..Default::default()
+        })),
+        ..Default::default()
+    };
+    encrypt(&channels, primary, &mut dm).unwrap();
+    decrypt(&channels, &mut dm).unwrap();
+
+    // NodeDb.update_from is what the router layer would do before
+    // dispatch — track last_heard / snr / hops_away for the sender.
+    nodedb.update_from(&dm);
+
+    let out = dispatcher.dispatch(&dm, RxSource::Radio, BOB, None);
+    assert!(out.module_found);
+    let reply = out.reply.expect("nodeinfo reply expected");
+    assert_eq!(reply.to, ALICE);
+    assert_eq!(reply.channel, dm.channel, "reply uses request's channel");
+    let Some(PayloadVariant::Decoded(d)) = reply.payload_variant else {
+        panic!("reply payload must be decoded")
+    };
+    assert_eq!(d.portnum, PortNum::NodeinfoApp as i32);
+    assert_eq!(d.request_id, 0x7002, "request_id must be set by setReplyTo");
+    let decoded = User::decode(d.payload.as_slice()).unwrap();
+    assert_eq!(decoded.long_name, "Bob");
+    assert_eq!(decoded.id, "!0bbbbbbb");
+}
