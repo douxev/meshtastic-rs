@@ -156,3 +156,44 @@ fn nodeinfo_round_trip_dispatches_and_replies() {
     assert_eq!(decoded.long_name, "Bob");
     assert_eq!(decoded.id, "!0bbbbbbb");
 }
+
+/// Routing module registers alongside other modules without eating
+/// their packets, and produces a properly-stamped ACK via
+/// `alloc_ack_nak`.
+#[test]
+fn routing_module_coexists_and_builds_acks() {
+    use meshtastic_modules::{alloc_ack_nak, RoutingModule, TextMessageModule};
+    use meshtastic_proto::meshtastic::routing;
+
+    // A dispatcher with Routing registered first (promiscuous + any
+    // portnum) then Text. Routing must NOT stop the Text packet from
+    // reaching the text module.
+    let mut dispatcher = ModuleDispatcher::new();
+    dispatcher.register(RoutingModule::new());
+    dispatcher.register(TextMessageModule::new());
+
+    let channels = Channels::with_default_primary();
+    let primary = channels.primary_index();
+    let mut p = text_packet(ALICE, BOB, 0x9, "hello");
+    encrypt(&channels, primary, &mut p).unwrap();
+    decrypt(&channels, &mut p).unwrap();
+
+    let out = dispatcher.dispatch(&p, RxSource::Radio, BOB, None);
+    assert!(
+        out.module_found,
+        "TextMessageModule must still see the packet through RoutingModule"
+    );
+    assert!(
+        out.reply.is_none(),
+        "RoutingModule never auto-replies, TextMessageModule never replies"
+    );
+
+    // Build an ACK for Alice's text message.
+    let ack = alloc_ack_nak(routing::Error::None, ALICE, 0x9, p.channel, 3);
+    assert_eq!(ack.to, ALICE);
+    let Some(PayloadVariant::Decoded(d)) = ack.payload_variant else {
+        panic!("ack must be decoded")
+    };
+    assert_eq!(d.portnum, PortNum::RoutingApp as i32);
+    assert_eq!(d.request_id, 0x9);
+}

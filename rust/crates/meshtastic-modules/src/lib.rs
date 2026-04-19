@@ -23,6 +23,13 @@
 //!   same-requester reply-suppression window, and emits our own `User`
 //!   as the reply body when someone asks for one.
 //!
+//! - [`routing::RoutingModule`] — a port of
+//!   `src/modules/RoutingModule.cpp`. Ships with pure helpers for the
+//!   firmware's rebroadcast-mode filter ([`rebroadcast_decision`]),
+//!   the "hop limit for a response" calculation
+//!   ([`hop_limit_for_response`]), and the Routing ACK/NAK packet
+//!   builder ([`alloc_ack_nak`]).
+//!
 //! Deliberately **not** in scope for this phase: admin messages, UI
 //! frames, periodic broadcasts, and the full set of concrete modules
 //! (Position, Routing, Telemetry, …). The trait is shaped so those can
@@ -36,8 +43,13 @@ extern crate alloc;
 
 pub mod module;
 pub mod node_info;
+pub mod routing;
 pub mod text_message;
 
 pub use module::{ModuleContext, ModuleDispatcher, ProcessMessage, RxSource};
 pub use node_info::{NodeInfoModule, NodeUserUpdate};
+pub use routing::{
+    alloc_ack_nak, configured_or_default_hop_limit, hop_limit_for_response, rebroadcast_decision, RebroadcastDecision,
+    RebroadcastInputs, RoutingModule, HOP_MAX, HOP_RELIABLE,
+};
 pub use text_message::TextMessageModule;
