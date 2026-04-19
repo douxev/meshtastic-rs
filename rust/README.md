@@ -19,11 +19,12 @@ rust/
 ├── rust-toolchain.toml            # pinned to stable
 ├── crates/
 │   ├── meshtastic-proto/          # Phase 1: prost codegen from ../protobufs
-│   └── meshtastic-crypto/         # Phase 3: channel hash + AES-CTR; passes
-│                                  #   byte-for-byte golden vectors from the
-│                                  #   C++ oracle (test/rust-golden-vectors/)
+│   ├── meshtastic-crypto/         # Phase 3: channel hash + AES-CTR; passes
+│   │                              #   byte-for-byte golden vectors from the
+│   │                              #   C++ oracle (test/rust-golden-vectors/)
+│   └── meshtastic-core/           # Phase 4a: Channels table + MeshPacket
+│                                  #   encrypt/decrypt pipeline
 │   # future:
-│   # ├── meshtastic-core/
 │   # ├── meshtastic-modules/
 │   # ├── meshtastic-hal/
 │   # ├── meshtastic-sim/
@@ -55,7 +56,8 @@ cargo clippy --workspace --all-targets -- -D warnings
 | 1     | Workspace skeleton + `meshtastic-proto` + CI               | **done**      |
 | 2     | Golden-vector harness (`test/rust-golden-vectors/`)        | **done**      |
 | 3     | `meshtastic-crypto` (AES-CTR packet crypto, channel hash)  | **done**      |
-| 4     | `meshtastic-core` (MeshPacket, Channels, NodeDB, Router)   | not started   |
+| 4a    | `meshtastic-core`: Channels table + packet encrypt/decrypt | **done**      |
+| 4b    | `meshtastic-core`: NodeDB + Router                         | not started   |
 | 5     | `meshtastic-modules` (text, nodeinfo, position, routing…)  | not started   |
 | 6     | `meshtastic-hal` traits + `meshtastic-sim` host fakes      | not started   |
 | 7     | `meshtastic-tdeck` binary (esp-hal-embassy + drivers)      | not started   |

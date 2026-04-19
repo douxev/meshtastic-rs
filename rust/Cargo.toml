@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "crates/meshtastic-proto",
     "crates/meshtastic-crypto",
+    "crates/meshtastic-core",
 ]
 
 [workspace.package]
