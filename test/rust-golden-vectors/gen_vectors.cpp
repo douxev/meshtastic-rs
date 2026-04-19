@@ -14,7 +14,8 @@
 //   - src/mesh/Channels.h:143        defaultpsk (AES-128)
 //   - src/mesh/Channels.h:147        eventpsk   (AES-256)
 //
-// Build: g++ -std=c++17 -O2 -Wall gen_vectors.cpp -o gen_vectors -lcrypto
+// Build: g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic gen_vectors.cpp -o gen_vectors -lcrypto
+//        (or just `make` — see ./Makefile)
 // Run:   ./gen_vectors > vectors.json
 
 #include <openssl/evp.h>
