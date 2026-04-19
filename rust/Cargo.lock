@@ -310,6 +310,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "meshtastic-hal"
+version = "0.1.0"
+dependencies = [
+ "meshtastic-core",
+ "meshtastic-proto",
+]
+
+[[package]]
 name = "meshtastic-modules"
 version = "0.1.0"
 dependencies = [
@@ -326,6 +334,20 @@ dependencies = [
  "prost-build",
  "prost-types",
  "serde",
+]
+
+[[package]]
+name = "meshtastic-sim"
+version = "0.1.0"
+dependencies = [
+ "meshtastic-core",
+ "meshtastic-hal",
+ "meshtastic-modules",
+ "meshtastic-proto",
+ "prost",
+ "rand",
+ "rand_chacha",
+ "rand_core",
 ]
 
 [[package]]

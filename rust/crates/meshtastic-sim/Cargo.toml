@@ -1,0 +1,20 @@
+[package]
+name = "meshtastic-sim"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Host-side simulator of the Meshtastic HAL: deterministic clock, RNG, and in-memory radio bus for integration testing"
+
+[dependencies]
+meshtastic-proto = { path = "../meshtastic-proto" }
+meshtastic-core = { path = "../meshtastic-core" }
+meshtastic-hal = { path = "../meshtastic-hal" }
+rand = { version = "0.9", default-features = false, features = ["std_rng"] }
+rand_chacha = { version = "0.9", default-features = false }
+rand_core = { version = "0.9", default-features = false }
+
+[dev-dependencies]
+meshtastic-modules = { path = "../meshtastic-modules" }
+prost = { version = "0.13", default-features = false, features = ["prost-derive"] }

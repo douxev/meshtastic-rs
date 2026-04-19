@@ -5,6 +5,8 @@ members = [
     "crates/meshtastic-crypto",
     "crates/meshtastic-core",
     "crates/meshtastic-modules",
+    "crates/meshtastic-hal",
+    "crates/meshtastic-sim",
 ]
 
 [workspace.package]

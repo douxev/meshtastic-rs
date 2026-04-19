@@ -26,10 +26,12 @@ rust/
 │   │                              #   encrypt/decrypt pipeline
 │   │                              # Phase 4b: NodeDb + PacketHistory
 │   └── meshtastic-modules/        # Phase 5: MeshModule trait +
-│                                  #   ModuleDispatcher + TextMessageModule
+│                                  #   ModuleDispatcher +
+│                                  #   TextMessage / NodeInfo / Routing modules
+│   ├── meshtastic-hal/             # Phase 6: HAL traits (Clock, Rng, Radio)
+│   └── meshtastic-sim/             # Phase 6: host-side sim (SimClock, SimRng,
+│                                  #   SimRadioBus) + end-to-end integration tests
 │   # future:
-│   # ├── meshtastic-hal/
-│   # ├── meshtastic-sim/
 │   # └── meshtastic-tdeck/        # esp-hal-embassy bin crate
 ```
 
@@ -61,7 +63,7 @@ cargo clippy --workspace --all-targets -- -D warnings
 | 4a    | `meshtastic-core`: Channels table + packet encrypt/decrypt | **done**      |
 | 4b    | `meshtastic-core`: NodeDb + PacketHistory                  | **done**      |
 | 5     | `meshtastic-modules`: module trait + dispatcher + TextMessage + NodeInfo + Routing | **in progress** |
-| 6     | `meshtastic-hal` traits + `meshtastic-sim` host fakes      | not started   |
+| 6     | `meshtastic-hal` traits + `meshtastic-sim` host fakes      | **done**      |
 | 7     | `meshtastic-tdeck` binary (esp-hal-embassy + drivers)      | not started   |
 | 8     | BLE client API                                             | not started   |
 | 9     | Polish (deep sleep, OTA, persistent config)                | not started   |
