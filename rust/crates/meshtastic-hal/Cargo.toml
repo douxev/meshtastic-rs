@@ -1,0 +1,17 @@
+[package]
+name = "meshtastic-hal"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Hardware-abstraction-layer traits for the Rust Meshtastic port (clock, RNG, LoRa radio)"
+
+[dependencies]
+meshtastic-proto = { path = "../meshtastic-proto" }
+meshtastic-core = { path = "../meshtastic-core", default-features = false }
+
+[features]
+default = ["std"]
+## Enable `std::error::Error` impls on error enums.
+std = ["meshtastic-core/std"]

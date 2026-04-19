@@ -1,0 +1,26 @@
+[package]
+name = "meshtastic-crypto"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Meshtastic channel-packet crypto (AES-CTR) and channel hash; no_std + alloc"
+
+[dependencies]
+aes = { version = "0.8", default-features = false }
+ctr = { version = "0.9", default-features = false }
+cipher = { version = "0.4", default-features = false }
+zeroize = { version = "1", default-features = false }
+
+[dev-dependencies]
+hex = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+proptest = "1"
+
+[features]
+default = ["std"]
+## Enable `std::error::Error` impl on `CryptoError`. No other functionality
+## depends on std.
+std = []

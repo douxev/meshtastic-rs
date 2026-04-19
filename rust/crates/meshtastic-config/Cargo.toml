@@ -1,0 +1,21 @@
+[package]
+name = "meshtastic-config"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Persistent storage layer for Meshtastic device config (LocalConfig, LocalModuleConfig, ChannelFile, NodeDatabase)"
+
+[dependencies]
+meshtastic-proto = { path = "../meshtastic-proto" }
+prost = { version = "0.13", default-features = false, features = ["prost-derive"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[features]
+default = ["std"]
+## Enable [`FsConfigStore`] (file-backed persistence) and
+## `std::error::Error` impls.
+std = ["prost/std"]

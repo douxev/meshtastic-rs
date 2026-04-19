@@ -1,0 +1,21 @@
+[package]
+name = "meshtastic-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Meshtastic mesh-protocol core types: Channels table and MeshPacket encrypt/decrypt pipeline"
+
+[dependencies]
+meshtastic-proto = { path = "../meshtastic-proto" }
+meshtastic-crypto = { path = "../meshtastic-crypto" }
+prost = { version = "0.13", default-features = false, features = ["prost-derive"] }
+
+[dev-dependencies]
+proptest = "1"
+
+[features]
+default = ["std"]
+## Enable `std::error::Error` impls on error enums.
+std = ["meshtastic-crypto/std"]

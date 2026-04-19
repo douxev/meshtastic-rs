@@ -1,0 +1,75 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [master, main, develop]
+    paths:
+      - "rust/**"
+      - "protobufs/**"
+      - ".github/workflows/rust_ci.yml"
+  pull_request:
+    paths:
+      - "rust/**"
+      - "protobufs/**"
+      - ".github/workflows/rust_ci.yml"
+  workflow_dispatch:
+
+# Cancel superseded runs of the same branch/PR.
+concurrency:
+  group: rust-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  RUSTFLAGS: "-D warnings"
+  RUST_BACKTRACE: "1"
+
+defaults:
+  run:
+    working-directory: rust
+
+jobs:
+  rust:
+    name: fmt + clippy + test (Rust workspace)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout (with protobufs submodule)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install protoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends protobuf-compiler
+          protoc --version
+
+      - name: Install Rust toolchain (from rust-toolchain.toml)
+        run: |
+          rustup show active-toolchain || rustup toolchain install
+          rustc --version
+          cargo --version
+
+      - name: Cache cargo registry & build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            rust/target
+          key: rust-${{ runner.os }}-${{ hashFiles('rust/Cargo.toml', 'rust/**/Cargo.toml', 'rust/rust-toolchain.toml') }}
+          restore-keys: |
+            rust-${{ runner.os }}-
+
+      - name: cargo fmt --check
+        run: cargo fmt --all -- --check
+
+      - name: cargo clippy
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
+      - name: cargo test
+        run: cargo test --workspace --locked
