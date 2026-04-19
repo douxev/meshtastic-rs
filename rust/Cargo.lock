@@ -310,6 +310,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "meshtastic-modules"
+version = "0.1.0"
+dependencies = [
+ "meshtastic-core",
+ "meshtastic-proto",
+ "prost",
+]
+
+[[package]]
 name = "meshtastic-proto"
 version = "0.1.0"
 dependencies = [

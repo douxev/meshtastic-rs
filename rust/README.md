@@ -22,11 +22,12 @@ rust/
 │   ├── meshtastic-crypto/         # Phase 3: channel hash + AES-CTR; passes
 │   │                              #   byte-for-byte golden vectors from the
 │   │                              #   C++ oracle (test/rust-golden-vectors/)
-│   └── meshtastic-core/           # Phase 4a: Channels table + MeshPacket
-│                                  #   encrypt/decrypt pipeline
-│                                  # Phase 4b: NodeDb + PacketHistory
+│   ├── meshtastic-core/           # Phase 4a: Channels table + MeshPacket
+│   │                              #   encrypt/decrypt pipeline
+│   │                              # Phase 4b: NodeDb + PacketHistory
+│   └── meshtastic-modules/        # Phase 5: MeshModule trait +
+│                                  #   ModuleDispatcher + TextMessageModule
 │   # future:
-│   # ├── meshtastic-modules/
 │   # ├── meshtastic-hal/
 │   # ├── meshtastic-sim/
 │   # └── meshtastic-tdeck/        # esp-hal-embassy bin crate
@@ -59,7 +60,7 @@ cargo clippy --workspace --all-targets -- -D warnings
 | 3     | `meshtastic-crypto` (AES-CTR packet crypto, channel hash)  | **done**      |
 | 4a    | `meshtastic-core`: Channels table + packet encrypt/decrypt | **done**      |
 | 4b    | `meshtastic-core`: NodeDb + PacketHistory                  | **done**      |
-| 5     | `meshtastic-modules` (text, nodeinfo, position, routing…)  | not started   |
+| 5     | `meshtastic-modules`: module trait + dispatcher + TextMessage | **in progress** |
 | 6     | `meshtastic-hal` traits + `meshtastic-sim` host fakes      | not started   |
 | 7     | `meshtastic-tdeck` binary (esp-hal-embassy + drivers)      | not started   |
 | 8     | BLE client API                                             | not started   |

@@ -1,0 +1,18 @@
+[package]
+name = "meshtastic-modules"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Meshtastic mesh-protocol modules: trait-based feature modules (text messaging, …) and the dispatcher that drives them"
+
+[dependencies]
+meshtastic-proto = { path = "../meshtastic-proto" }
+meshtastic-core = { path = "../meshtastic-core" }
+prost = { version = "0.13", default-features = false, features = ["prost-derive"] }
+
+[features]
+default = ["std"]
+## Enable `std::error::Error` impls on error enums.
+std = ["meshtastic-core/std"]

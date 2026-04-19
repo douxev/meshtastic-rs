@@ -4,6 +4,7 @@ members = [
     "crates/meshtastic-proto",
     "crates/meshtastic-crypto",
     "crates/meshtastic-core",
+    "crates/meshtastic-modules",
 ]
 
 [workspace.package]
