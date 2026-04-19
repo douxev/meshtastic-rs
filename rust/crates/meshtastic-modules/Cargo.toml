@@ -9,7 +9,7 @@ description = "Meshtastic mesh-protocol modules: trait-based feature modules (te
 
 [dependencies]
 meshtastic-proto = { path = "../meshtastic-proto" }
-meshtastic-core = { path = "../meshtastic-core" }
+meshtastic-core = { path = "../meshtastic-core", default-features = false }
 prost = { version = "0.13", default-features = false, features = ["prost-derive"] }
 
 [features]

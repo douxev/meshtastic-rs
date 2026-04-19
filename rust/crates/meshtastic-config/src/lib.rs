@@ -39,9 +39,7 @@ use alloc::boxed::Box;
 use alloc::vec::Vec;
 use core::fmt;
 
-use meshtastic_proto::meshtastic::{
-    ChannelFile, DeviceState, LocalConfig, LocalModuleConfig, NodeDatabase,
-};
+use meshtastic_proto::meshtastic::{ChannelFile, DeviceState, LocalConfig, LocalModuleConfig, NodeDatabase};
 use prost::Message;
 
 /// The current on-disk schema version. Mirrors firmware
