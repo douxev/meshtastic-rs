@@ -17,16 +17,34 @@
 //!   channel *hash* (wire convention) or *index* (local convention) as
 //!   appropriate.
 //!
+//! Phase 4b adds two more fundamentals:
+//!
+//! - [`nodedb::NodeDb`] — bounded in-memory table of known nodes, keyed
+//!   by [`NodeNum`][mesh::NodeNum], with LRU eviction that prefers
+//!   "boring" (no PKI pubkey) entries and never evicts favourites or
+//!   our own node.
+//! - [`packet_history::PacketHistory`] — the fixed-capacity dedup ring
+//!   used by the router to drop re-broadcasts of packets we've
+//!   already seen. Also tracks relayer last-bytes and highest-observed
+//!   hop_limit for upgrade detection.
+//!
+//! Shared low-level helpers live in [`mesh`] (`NodeNum`,
+//! `NODENUM_BROADCAST`, `get_from`, `hops_away`, …).
+//!
 //! Deliberately **not** in scope for this phase:
 //!
-//! - NodeDB (known-nodes table with LRU eviction) — planned for Phase 4b.
-//! - Router (retransmission, flood, priority queue) — planned for 4b.
+//! - Router flooding decisions (`shouldFilterReceived`,
+//!   `perhapsRebroadcast`) — they depend on
+//!   `config.device.role`/`rebroadcast_mode` and belong with the
+//!   module/HAL layer (Phase 5/6).
 //! - PKI / Curve25519 DM encryption — planned for a later phase; the
 //!   `pki_encrypted`/`public_key` fields on `MeshPacket` are passed
 //!   through untouched today.
-//! - Persistence to flash — the `Channels` type roundtrips to
-//!   [`ChannelFile`][meshtastic_proto::meshtastic::ChannelFile] so that
-//!   the platform layer can persist it however it likes.
+//! - Persistence to flash — `Channels` and `NodeDb` both roundtrip
+//!   through their respective proto types
+//!   ([`ChannelFile`][meshtastic_proto::meshtastic::ChannelFile],
+//!   [`NodeDatabase`][meshtastic_proto::meshtastic::NodeDatabase]) so
+//!   the platform layer can persist them however it likes.
 //!
 //! # Quick example
 //!
@@ -71,7 +89,13 @@
 extern crate alloc;
 
 pub mod channels;
+pub mod mesh;
+pub mod nodedb;
 pub mod packet;
+pub mod packet_history;
 
 pub use channels::{ChannelSlot, Channels, ChannelsError, MAX_NUM_CHANNELS};
+pub use mesh::{NodeNum, NODENUM_BROADCAST};
+pub use nodedb::{NodeDb, NodeDbError};
 pub use packet::{decrypt, encrypt, PacketError};
+pub use packet_history::{PacketHistory, PacketRecord, SeenInfo};
